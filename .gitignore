@@ -31,3 +31,15 @@ tests/_support/_generated
 
 #vagrant folder
 /.vagrant
+
+# Sensitive files
+/.ssh
+/config/*db*.php
+*phpinfo*.php
+
+# Assets
+/web/assets
+/web/images
+
+# Auto-generated files
+/rbac/assignments.php
