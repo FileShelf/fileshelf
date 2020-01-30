@@ -35,6 +35,7 @@ tests/_support/_generated
 # Sensitive files
 /.ssh
 /config/*db*.php
+!/config/_db_template.php
 *phpinfo*.php
 
 # Assets
@@ -42,4 +43,6 @@ tests/_support/_generated
 /web/images
 
 # Auto-generated files
+/messages/*/*.php
+!/messages/*/app.php
 /rbac/assignments.php
