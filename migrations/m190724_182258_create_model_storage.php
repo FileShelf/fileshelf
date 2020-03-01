@@ -7,6 +7,7 @@ use yii\db\Migration;
  */
 class m190724_182258_create_model_storage extends Migration
 {
+
     /**
      * {@inheritdoc}
      */
@@ -24,6 +25,8 @@ class m190724_182258_create_model_storage extends Migration
             'updated_at' => $this->integer()->comment('Updated at')->defaultValue(null),
             'deleted_by' => $this->integer()->comment('Deleted by'),
             'deleted_at' => $this->integer()->comment('Deleted at')->defaultValue(null),
+            'deleted_by'  => $this->integer()->comment('Deleted by'),
+            'deleted_at'  => $this->integer()->comment('Deleted at')->defaultValue(null),
         ]);
         $this->addForeignKey('fk_user_storage_type_created', '{{%storage_type}}', 'created_by', '{{%user}}', 'id', 'CASCADE', 'CASCADE');
         $this->addForeignKey('fk_user_storage_type_updated', '{{%storage_type}}', 'updated_by', '{{%user}}', 'id', 'CASCADE', 'CASCADE');
@@ -42,12 +45,16 @@ class m190724_182258_create_model_storage extends Migration
             'updated_at'      => $this->integer()->comment('Updated at')->defaultValue(null),
             'deleted_by'      => $this->integer()->comment('Deleted by'),
             'deleted_at'      => $this->integer()->comment('Deleted at')->defaultValue(null),
+            'deleted_by'      => $this->integer()->comment('Deleted by'),
+            'deleted_at'      => $this->integer()->comment('Deleted at')->defaultValue(null),
         ]);
         $this->addForeignKey('fk_user_storage_created', '{{%storage}}', 'created_by', '{{%user}}', 'id', 'CASCADE', 'CASCADE');
         $this->addForeignKey('fk_user_storage_updated', '{{%storage}}', 'updated_by', '{{%user}}', 'id', 'CASCADE', 'CASCADE');
         $this->addForeignKey('fk_user_storage_deleted', '{{%storage}}', 'deleted_by', '{{%user}}', 'id', 'CASCADE', 'CASCADE');
+        $this->addForeignKey('fk_user_storage_deleted', '{{%storage}}', 'deleted_by', '{{%user}}', 'id', 'CASCADE', 'CASCADE');
         $this->addForeignKey('fk_storage_type_storage', '{{%storage}}', 'storage_type_id', '{{%storage_type}}', 'id', 'RESTRICT', 'CASCADE');
     }
+
 
     /**
      * {@inheritdoc}
