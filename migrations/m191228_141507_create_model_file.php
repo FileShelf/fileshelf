@@ -30,10 +30,9 @@ class m191228_141507_create_model_file extends Migration
             'deleted_by'       => $this->integer()->comment('Deleted by'),
             'deleted_at'       => $this->integer()->comment('Deleted at')->defaultValue(null),
         ]);
-        $this->addForeignKey('fk_user_storage_type_created', '{{%storage_type}}', 'created_by', '{{%user}}', 'id', 'CASCADE', 'CASCADE');
-        $this->addForeignKey('fk_user_storage_type_updated', '{{%storage_type}}', 'updated_by', '{{%user}}', 'id', 'CASCADE', 'CASCADE');
-        $this->addForeignKey('fk_user_storage_type_deleted', '{{%storage_type}}', 'deleted_by', '{{%user}}', 'id', 'CASCADE', 'CASCADE');
-
+        $this->addForeignKey('fk_user_file_created', '{{%file}}', 'created_by', '{{%user}}', 'id', 'CASCADE', 'CASCADE');
+        $this->addForeignKey('fk_user_file_updated', '{{%file}}', 'updated_by', '{{%user}}', 'id', 'CASCADE', 'CASCADE');
+        $this->addForeignKey('fk_user_file_deleted', '{{%file}}', 'deleted_by', '{{%user}}', 'id', 'CASCADE', 'CASCADE');
     }
 
     /**
@@ -41,23 +40,10 @@ class m191228_141507_create_model_file extends Migration
      */
     public function safeDown()
     {
-        echo "m191228_141507_create_model_file cannot be reverted.\n";
-
-        return false;
+        $this->dropForeignKey('fk_user_file_created', '{{%file}}');
+        $this->dropForeignKey('fk_user_file_updated', '{{%file}}');
+        $this->dropForeignKey('fk_user_file_deleted', '{{%file}}');
+        $this->dropTable('{{%file}}');
     }
 
-    /*
-    // Use up()/down() to run migration code without a transaction.
-    public function up()
-    {
-
-    }
-
-    public function down()
-    {
-        echo "m191228_141507_create_model_file cannot be reverted.\n";
-
-        return false;
-    }
-    */
 }
