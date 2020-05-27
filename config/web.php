@@ -52,11 +52,27 @@ $config = [
         ],
         'db'           => $db,
 
+        'i18n'       => [
+            'translations' => [
+                '*' => [
+                    'class'         => 'yii\i18n\DbMessageSource',
+                    'enableCaching' => !YII_ENV_DEV,
+                ],
+            ],
+        ],
         'urlManager' => [
             'enablePrettyUrl'     => true,
             'enableStrictParsing' => true,
             'showScriptName'      => false,
             'rules'               => [
+                [
+                    'class'      => 'yii\rest\UrlRule',
+                    'controller' => [
+                        'v1/user',
+                        'v1/type',
+                    ],
+                    'pluralize'  => false,
+                ],
             ],
         ],
 

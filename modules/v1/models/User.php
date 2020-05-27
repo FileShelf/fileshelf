@@ -2,24 +2,22 @@
 
 namespace app\modules\v1\models;
 
+use app\modules\v1\components\FileShelfModel;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "user".
+ * This is the model class for table "{{%user}}".
  *
- * @property int           $id          ID
- * @property string        $name        Name
- * @property string        $avatar      Icon
- * @property string        $formats     Formats
- * @property int           $created_by  Created by
- * @property int           $created_at  Created at
- * @property int           $modified_by Modified by
- * @property int           $modified_at Modified at
- *
- * @property Storage[]     $ownStorages
- * @property StorageType[] $ownStorageTypes
+ * @property string $name          Name
+ * @property string $email         E-Mail
+ * @property string $password_hash Password
+ * @property string $access_token  Access Token
+ * @property string $refresh_token Refresh Token
+ * @property string $avatar        Avatar
+ * @property string $formats       Formats
  */
-class User extends \yii\db\ActiveRecord
+class User extends FileShelfModel
 {
     /**
      * {@inheritdoc}
@@ -43,10 +41,9 @@ class User extends \yii\db\ActiveRecord
      */
     public function rules()
     {
-        return [
-            [['created_by', 'created_at', 'modified_by', 'modified_at'], 'integer'],
-            [['name', 'avatar', 'formats'], 'string', 'max' => 255],
-        ];
+        return ArrayHelper::merge(parent::rules(), [
+            [['name', 'email', 'password_hash', 'access_token', 'refresh_token', 'avatar', 'formats'], 'string', 'max' => 255],
+        ]);
     }
 
     /**
@@ -54,31 +51,15 @@ class User extends \yii\db\ActiveRecord
      */
     public function attributeLabels()
     {
-        return [
-            'id'          => Yii::t('v1', 'ID'),
-            'name'        => Yii::t('v1', 'Name'),
-            'avatar'      => Yii::t('v1', 'Icon'),
-            'formats'     => Yii::t('v1', 'Formats'),
-            'created_by'  => Yii::t('v1', 'Created by'),
-            'created_at'  => Yii::t('v1', 'Created at'),
-            'modified_by' => Yii::t('v1', 'Modified by'),
-            'modified_at' => Yii::t('v1', 'Modified at'),
-        ];
+        return ArrayHelper::merge(parent::attributeLabels(), [
+            'name'          => Yii::t('user', 'Name'),
+            'email'         => Yii::t('user', 'E-Mail'),
+            'password_hash' => Yii::t('user', 'Password'),
+            'access_token'  => Yii::t('user', 'Access Token'),
+            'refresh_token' => Yii::t('user', 'Refresh Token'),
+            'avatar'        => Yii::t('user', 'Avatar'),
+            'formats'       => Yii::t('user', 'Formats'),
+        ]);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getOwnStorages()
-    {
-        return $this->hasMany(Storage::class, ['created_by' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getOwnStorageTypes()
-    {
-        return $this->hasMany(StorageType::class, ['created_by' => 'id']);
-    }
 }

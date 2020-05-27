@@ -2,7 +2,9 @@
 
 namespace app\modules\v1\models;
 
+use app\modules\v1\models\query\StorageQuery;
 use Yii;
+use yii\db\ActiveQuery;
 
 /**
  * This is the model class for table "storage".
@@ -74,7 +76,7 @@ class Storage extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery|StorageQuery
      */
     public function getStorageType()
     {
@@ -82,7 +84,7 @@ class Storage extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery|StorageQuery
      */
     public function getCreatedBy()
     {
@@ -90,7 +92,7 @@ class Storage extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery|StorageQuery
      */
     public function getModifiedBy()
     {
