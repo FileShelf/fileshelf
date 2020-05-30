@@ -1,18 +1,19 @@
 <?php
 
-namespace app\modules\v1\components;
+namespace app\components;
 
-use app\modules\v1\models\User;
+use app\models\User;
 use Yii;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii2tech\ar\softdelete\SoftDeleteBehavior;
 
 /**
  * Class FileShelfModel
  *
- * @package   app\modules\v1\components
+ * @package   app\components
  *
  * @property int      $id            ID
  * @property int|null $created_by    Created by
@@ -23,14 +24,16 @@ use yii2tech\ar\softdelete\SoftDeleteBehavior;
  * @property int|null $deleted_at    Deleted at
  * @property boolean  $is_deleted    Is deleted
  *
- * @property User   $createdBy
- * @property User   $deletedBy
- * @property User   $updatedBy
+ * @property User     $createdBy
+ * @property User     $deletedBy
+ * @property User     $updatedBy
  */
 class FileShelfModel extends ActiveRecord
 {
+
     public const SCENARIO_CREATE = 'create';
     public const SCENARIO_UPDATE = 'update';
+
 
     /**
      * {@inheritdoc}
@@ -49,6 +52,7 @@ class FileShelfModel extends ActiveRecord
         ];
     }
 
+
     public function afterSoftDelete()
     {
         /** @var User $user */
@@ -58,6 +62,7 @@ class FileShelfModel extends ActiveRecord
 
         $this->save(false);
     }
+
 
     /**
      * {@inheritdoc}
@@ -71,6 +76,7 @@ class FileShelfModel extends ActiveRecord
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['updated_by' => 'id']],
         ];
     }
+
 
     /**
      * {@inheritdoc}
@@ -89,26 +95,29 @@ class FileShelfModel extends ActiveRecord
         ];
     }
 
+
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCreatedBy(): \yii\db\ActiveQuery
+    public function getCreatedBy() : ActiveQuery
     {
         return $this->hasOne(User::class, ['id' => 'created_by']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getDeletedBy(): \yii\db\ActiveQuery
-    {
-        return $this->hasOne(User::class, ['id' => 'deleted_by']);
-    }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUpdatedBy(): \yii\db\ActiveQuery
+    public function getDeletedBy() : ActiveQuery
+    {
+        return $this->hasOne(User::class, ['id' => 'deleted_by']);
+    }
+
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUpdatedBy() : ActiveQuery
     {
         return $this->hasOne(User::class, ['id' => 'updated_by']);
     }

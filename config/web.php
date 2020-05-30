@@ -65,23 +65,13 @@ $config = [
             'enableStrictParsing' => true,
             'showScriptName'      => false,
             'rules'               => [
-                [
-                    'class'      => 'yii\rest\UrlRule',
-                    'controller' => [
-                        'v1/user',
-                        'v1/type',
-                    ],
-                    'pluralize'  => false,
-                ],
+                ''         => 'site/index',
+                '<action>' => 'site/<action>',
             ],
         ],
 
     ],
-    'modules'    => [
-        'v1' => [
-            'class' => 'app\modules\v1\Module',
-        ],
-    ],
+    'modules'    => [],
     'params'     => $params,
 ];
 
