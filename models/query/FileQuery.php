@@ -1,16 +1,17 @@
 <?php
 
-namespace app\modules\v1\models\query;
+namespace app\models\query;
 
-use app\modules\v1\models\StorageType;
+use yii\db\ActiveQuery;
 
 /**
- * This is the ActiveQuery class for [[StorageType]].
+ * This is the ActiveQuery class for [[\app\models\File]].
  *
- * @see \app\modules\v1\models\StorageType
+ * @see \app\models\File
  */
-class StorageTypeQuery extends \yii\db\ActiveQuery
+class FileQuery extends ActiveQuery
 {
+
     /*public function active()
     {
         return $this->andWhere('[[status]]=1');
@@ -18,16 +19,17 @@ class StorageTypeQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return StorageType[]|array
+     * @return \app\models\File[]|array
      */
     public function all($db = null)
     {
         return parent::all($db);
     }
 
+
     /**
      * {@inheritdoc}
-     * @return StorageType|array|null
+     * @return \app\models\File|array|null
      */
     public function one($db = null)
     {
