@@ -12,8 +12,9 @@ nbproject
 # windows thumbnail cache
 Thumbs.db
 
-# composer vendor dir
+# vendor dirs
 /vendor
+/node_modules
 
 # composer itself is not needed
 composer.phar
@@ -40,7 +41,11 @@ tests/_support/_generated
 
 # Assets
 /web/assets
-/web/images
+/web/css/style*.css*
+/web/js/*.min.js
+/web/webfonts/*
+!/web/webfonts/.gitkeep
+/web/thumbnails
 
 # Auto-generated files
 /messages/*/*.php
