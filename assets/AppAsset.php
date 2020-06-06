@@ -1,31 +1,35 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
 
 namespace app\assets;
 
 use yii\web\AssetBundle;
 
 /**
- * Main application asset bundle.
+ * Class AppAsset
+ * Main App Asset Bundle
  *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
+ * @package   app\assets
+ * @copyright 2015-2019 Ostendis AG
+ * @author    Tom Lutzenberger <tom.lutzenberger@ostendis.com>
  */
 class AppAsset extends AssetBundle
 {
+
     public $basePath = '@webroot';
-    public $baseUrl = '@web';
-    public $css = [
-        'css/site.css',
+    public $baseUrl  = '@web';
+
+    public $css       = [
+        'css/style.scss',
     ];
-    public $js = [
+    public $js        = [
+        'js/fileshelf' . (YII_DEBUG ? '' : '.min') . '.js',
     ];
-    public $depends = [
-        'yii\web\YiiAsset',
-        'yii\bootstrap\BootstrapAsset',
+    public $jsOptions = [
+        'defer' => true,
+    ];
+    public $depends   = [
+        'rmrevin\yii\fontawesome\NpmFreeAssetBundle',
+        'yii\bootstrap4\BootstrapPluginAsset',
+        'app\assets\GoogleFontAsset',
     ];
 }

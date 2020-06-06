@@ -1,0 +1,64 @@
+<?php
+
+/**
+ * @var $this app\components\View
+ */
+
+use rmrevin\yii\fontawesome\FAS;
+use yii\bootstrap4\Html;
+use yii\bootstrap4\Nav;
+use yii\bootstrap4\NavBar;
+
+/*
+$dropDownLangs = [];
+foreach (Yii::$app->params['languages'] as $lang) {
+    $dropDownLangs[] = ['label' => strtoupper($lang), 'url' => [Yii::$app->currentRoute, 'language' => $lang]];
+}*/
+
+NavBar::begin([
+    'brandLabel'            => Yii::$app->name,
+    'brandUrl'              => Yii::$app->homeUrl,
+    'brandOptions'          => [
+        'aria-label' => Yii::$app->name,
+    ],
+    'id'                    => 'navbar',
+    'options'               => [
+        'class' => 'navbar navbar-dark navbar-expand bg-dark fixed-top ',
+    ],
+    'innerContainerOptions' => [
+        'class' => 'container-fluid',
+    ],
+    'togglerContent'        => FAS::i('bars', ['aria-hidden' => 'true'])->fixedWidth(),
+    'collapseOptions'       => [
+        'class' => 'justify-content-between',
+    ],
+]);
+
+echo Html::tag('div', '', ['id' => 'navbarLeft']);
+
+echo Html::beginTag('div', ['id' => 'navbarCenter', 'class' => 'd-flex']);
+echo Html::beginForm('', 'post', ['class' => 'form-inline']);
+echo Html::input('search', 'search', null, ['class' => 'form-control', 'placeholder' => 'Search', 'aria-label' => 'Search']);
+echo Html::endForm();
+
+echo Html::button(FAS::i(FAS::_FILE_UPLOAD)->fixedWidth()->size(FAS::SIZE_LG), [
+    'class' => 'btn btn-success ml-3',
+]);
+echo Html::endTag('div');
+
+echo Nav::widget([
+    'id'           => 'navbarRight',
+    'options'      => ['class' => 'navbar-nav'],
+    'encodeLabels' => false,
+    'items'        => [
+        [
+            'label' => FAS::i(FAS::_USER)->fixedWidth()->size(FAS::SIZE_LG),
+            'url'   => ['user'],
+        ], [
+            'label' => FAS::i(FAS::_COGS)->fixedWidth()->size(FAS::SIZE_LG),
+            'url'   => ['settings'],
+        ],
+    ],
+]);
+NavBar::end();
+

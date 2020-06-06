@@ -5,6 +5,7 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id'         => 'fileshelf',
+    'name'       => 'FileShelf',
     'basePath'   => dirname(__DIR__),
     'bootstrap'  => ['log'],
     'aliases'    => [
@@ -18,6 +19,60 @@ $config = [
             'parsers'             => [
                 'application/json' => 'yii\web\JsonParser',
             ],
+        ],
+        'assetManager' => [
+            'bundles'         => [
+                'yii\bootstrap4\BootstrapAsset'              => [
+                    'css' => [],
+                ],
+                'yii\bootstrap4\BootstrapPluginAsset'        => [
+                    'js'        => [
+                        'js/bootstrap.bundle.min.js',
+                    ],
+                    'jsOptions' => [
+                        'defer' => true,
+                    ],
+                ],
+                'yii\web\JqueryAsset'                        => [
+                    'js'        => [
+                        'jquery.min.js',
+                    ],
+                    'jsOptions' => [],
+                ],
+                'rmrevin\yii\fontawesome\NpmFreeAssetBundle' => [
+                    'css'            => [],
+                    'publishOptions' => [
+                        'only'      => [
+                            // Copy only the fonts, because the FA styles are included differently
+                            'webfonts/*',
+                        ],
+                        'afterCopy' => static function ($from, $to) {
+                            // Overwrite font file destination path
+                            if (!is_file($from)) {
+                                return;
+                            }
+                            $fontPos = strpos($from, 'webfonts');
+                            if ($fontPos !== false && strpos($to, 'js-packages') === false) {
+                                $newPath = __DIR__ . '/../web/webfonts' . substr($from, $fontPos + 8);
+                                copy($from, $newPath);
+                            }
+                        },
+                    ],
+                ],
+            ],
+            'converter'       => [
+                'class'        => 'yii\web\AssetConverter',
+                'commands'     => [
+                    'scss' => ['css', '@app/node_modules/.bin/node-sass --output-style=compressed {from} {to}'],
+                ],
+                'forceConvert' => YII_ENV_DEV,
+            ],
+            'appendTimestamp' => true,
+        ],
+        'view'         => [
+            'class'       => 'app\components\View',
+            'titlePrefix' => '',
+            'titleSuffix' => ' | FileShelf',
         ],
         'cache'        => [
             'class' => 'yii\caching\FileCache',
