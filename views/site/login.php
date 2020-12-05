@@ -1,47 +1,42 @@
 <?php
 
 /* @var $this app\components\View */
-/* @var $form yii\bootstrap\ActiveForm */
-/* @var $model app\models\LoginForm */
+/* @var $form yii\bootstrap4\ActiveForm */
 
-use yii\bootstrap\ActiveForm;
+/* @var $model app\models\form\LoginForm */
+
+use yii\bootstrap4\ActiveForm;
 use yii\helpers\Html;
 
 $this->title = 'Login';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-login">
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="card">
+    <div class="card-body">
+        <h1 class="card-title text-center"><?= Html::encode($this->title) ?></h1>
 
-    <p>Please fill out the following fields to login:</p>
+        <div class="card-text">
 
-    <?php $form = ActiveForm::begin([
-        'id' => 'login-form',
-        'layout' => 'horizontal',
-        'fieldConfig' => [
-            'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
-            'labelOptions' => ['class' => 'col-lg-1 control-label'],
-        ],
-    ]); ?>
+            <?php
+            $form = ActiveForm::begin([
+                'id'          => 'loginForm',
+                'layout'      => 'horizontal',
+                'fieldConfig' => [
+                    'template'     => "{label}\n<div class=\"col-lg-6\">{input}</div>\n<div class=\"col-lg-16\">{error}</div>",
+                    'labelOptions' => ['class' => 'col-lg-2 control-label'],
+                ],
+            ]);
+            echo $form->field($model, 'username')->textInput(['autofocus' => true]);
+            echo $form->field($model, 'password')->passwordInput();
+            echo $form->field($model, 'rememberMe')->checkbox([
+                'template' => "<div class=\"offset-lg-2 col-lg-6\">{input} {label}</div>\n<div class=\"col-lg-16\">{error}</div>",
+            ]) ?>
 
-        <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
-
-        <?= $form->field($model, 'password')->passwordInput() ?>
-
-        <?= $form->field($model, 'rememberMe')->checkbox([
-            'template' => "<div class=\"col-lg-offset-1 col-lg-3\">{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
-        ]) ?>
-
-        <div class="form-group">
-            <div class="col-lg-offset-1 col-lg-11">
-                <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+            <div class="form-group">
+                <div class="offset-lg-2 col-lg-22">
+                    <?= Html::submitButton('Login', ['class' => 'btn btn-block btn-primary', 'name' => 'login-button']) ?>
+                </div>
             </div>
+
+            <?php ActiveForm::end(); ?>
         </div>
-
-    <?php ActiveForm::end(); ?>
-
-    <div class="col-lg-offset-1" style="color:#999;">
-        You may login with <strong>admin/admin</strong> or <strong>demo/demo</strong>.<br>
-        To modify the username/password, please check out the code <code>app\models\User::$users</code>.
     </div>
-</div>

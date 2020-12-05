@@ -9,6 +9,10 @@ use yii\web\Controller;
 class FileShelfController extends Controller
 {
 
+    public const LAYOUT_MAIN = 'main';
+    public const LAYOUT_EMPTY = 'empty';
+
+
     /**
      * {@inheritdoc}
      */
