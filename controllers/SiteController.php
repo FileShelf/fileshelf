@@ -4,7 +4,7 @@ namespace app\controllers;
 
 use app\components\FileShelfController;
 use app\models\ContactForm;
-use app\models\LoginForm;
+use app\models\form\LoginForm;
 use Yii;
 use yii\web\Response;
 
@@ -56,6 +56,7 @@ class SiteController extends FileShelfController
             return $this->goHome();
         }
 
+        $this->layout = self::LAYOUT_EMPTY;
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
