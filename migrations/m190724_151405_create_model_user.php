@@ -11,7 +11,7 @@ class m190724_151405_create_model_user extends Migration
     /**
      * {@inheritdoc}
      */
-    public function safeUp()
+    public function up() : bool
     {
         $this->createTable('{{%user}}', [
             'id'            => $this->primaryKey()->comment('ID'),
@@ -35,6 +35,7 @@ class m190724_151405_create_model_user extends Migration
         ]);
 
         $this->insert('{{%user}}', [
+            'id'         => 1,
             'name'       => 'system',
             'created_at' => 0,
         ]);
@@ -42,17 +43,21 @@ class m190724_151405_create_model_user extends Migration
         $this->addForeignKey('fk_user_user_created', '{{%user}}', 'created_by', '{{%user}}', 'id', 'SET NULL', 'CASCADE');
         $this->addForeignKey('fk_user_user_updated', '{{%user}}', 'updated_by', '{{%user}}', 'id', 'SET NULL', 'CASCADE');
         $this->addForeignKey('fk_user_user_deleted', '{{%user}}', 'deleted_by', '{{%user}}', 'id', 'SET NULL', 'CASCADE');
+
+        return true;
     }
 
 
     /**
      * {@inheritdoc}
      */
-    public function safeDown()
+    public function down() : bool
     {
         $this->dropForeignKey('fk_user_user_deleted', '{{%user}}');
         $this->dropForeignKey('fk_user_user_updated', '{{%user}}');
         $this->dropForeignKey('fk_user_user_created', '{{%user}}');
         $this->dropTable('{{%user}}');
+
+        return true;
     }
 }

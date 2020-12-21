@@ -7,10 +7,11 @@ use yii\db\Migration;
  */
 class m191228_141507_create_model_file extends Migration
 {
+
     /**
      * {@inheritdoc}
      */
-    public function safeUp()
+    public function up() : bool
     {
         $this->createTable('{{%file}}', [
             'id'               => $this->primaryKey()->comment('ID'),
@@ -33,17 +34,22 @@ class m191228_141507_create_model_file extends Migration
         $this->addForeignKey('fk_user_file_created', '{{%file}}', 'created_by', '{{%user}}', 'id', 'CASCADE', 'CASCADE');
         $this->addForeignKey('fk_user_file_updated', '{{%file}}', 'updated_by', '{{%user}}', 'id', 'CASCADE', 'CASCADE');
         $this->addForeignKey('fk_user_file_deleted', '{{%file}}', 'deleted_by', '{{%user}}', 'id', 'CASCADE', 'CASCADE');
+
+        return true;
     }
+
 
     /**
      * {@inheritdoc}
      */
-    public function safeDown()
+    public function down() : bool
     {
         $this->dropForeignKey('fk_user_file_created', '{{%file}}');
         $this->dropForeignKey('fk_user_file_updated', '{{%file}}');
         $this->dropForeignKey('fk_user_file_deleted', '{{%file}}');
         $this->dropTable('{{%file}}');
+
+        return true;
     }
 
 }

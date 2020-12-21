@@ -1,6 +1,7 @@
 <?php
 
 use yii\db\Migration;
+use yii\helpers\FileHelper;
 
 /**
  * Class m190724_182258_create_model_storage
@@ -11,8 +12,12 @@ class m190724_182258_create_model_storage extends Migration
     /**
      * {@inheritdoc}
      */
-    public function safeUp()
+    public function safeUp() : bool
     {
+        $storageTypeDefaultId = 1;
+        $storageDefaultId = 1;
+        $userDefaultId = 1;
+
         $this->createTable('{{%storage_type}}', [
             'id'         => $this->primaryKey()->comment('ID'),
             'name'       => $this->string()->comment('Name')->notNull(),
@@ -27,6 +32,12 @@ class m190724_182258_create_model_storage extends Migration
             'deleted_at' => $this->integer()->comment('Deleted at')->defaultValue(null),
             'deleted_by'  => $this->integer()->comment('Deleted by'),
             'deleted_at'  => $this->integer()->comment('Deleted at')->defaultValue(null),
+        ]);
+        $this->insert('{{%storage_type}}', [
+            'id'         => $storageTypeDefaultId,
+            'name'       => 'Documents',
+            'created_by' => $userDefaultId,
+            'created_at' => 0,
         ]);
         $this->addForeignKey('fk_user_storage_type_created', '{{%storage_type}}', 'created_by', '{{%user}}', 'id', 'CASCADE', 'CASCADE');
         $this->addForeignKey('fk_user_storage_type_updated', '{{%storage_type}}', 'updated_by', '{{%user}}', 'id', 'CASCADE', 'CASCADE');
@@ -48,18 +59,28 @@ class m190724_182258_create_model_storage extends Migration
             'deleted_by'      => $this->integer()->comment('Deleted by'),
             'deleted_at'      => $this->integer()->comment('Deleted at')->defaultValue(null),
         ]);
+        $this->insert('{{%storage}}', [
+            'id'              => $storageDefaultId,
+            'name'            => 'Default',
+            'path'            => FileHelper::normalizePath(Yii::getAlias('@runtime/data/defaultStorage')),
+            'storage_type_id' => $storageTypeDefaultId,
+            'created_by'      => $userDefaultId,
+            'created_at'      => 0,
+        ]);
         $this->addForeignKey('fk_user_storage_created', '{{%storage}}', 'created_by', '{{%user}}', 'id', 'CASCADE', 'CASCADE');
         $this->addForeignKey('fk_user_storage_updated', '{{%storage}}', 'updated_by', '{{%user}}', 'id', 'CASCADE', 'CASCADE');
         $this->addForeignKey('fk_user_storage_deleted', '{{%storage}}', 'deleted_by', '{{%user}}', 'id', 'CASCADE', 'CASCADE');
         $this->addForeignKey('fk_user_storage_deleted', '{{%storage}}', 'deleted_by', '{{%user}}', 'id', 'CASCADE', 'CASCADE');
         $this->addForeignKey('fk_storage_type_storage', '{{%storage}}', 'storage_type_id', '{{%storage_type}}', 'id', 'RESTRICT', 'CASCADE');
+
+        return true;
     }
 
 
     /**
      * {@inheritdoc}
      */
-    public function safeDown()
+    public function safeDown() : bool
     {
         $this->dropForeignKey('fk_user_storage_created', '{{%storage}}');
         $this->dropForeignKey('fk_user_storage_updated', '{{%storage}}');
@@ -71,6 +92,8 @@ class m190724_182258_create_model_storage extends Migration
         $this->dropForeignKey('fk_user_storage_type_updated', '{{%storage_type}}');
         $this->dropForeignKey('fk_user_storage_type_deleted', '{{%storage_type}}');
         $this->dropTable('{{%storage_type}}');
+
+        return true;
     }
 
 }
