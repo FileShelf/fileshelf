@@ -33,7 +33,7 @@ class FileController extends Controller
         /** @var FileScanner $scannerComponent */
         $scannerComponent = Yii::$app->fileScanner;
 
-        echo print_r($scannerComponent->findAllPhysicalFiles(), 1);
+        $scannerComponent->saveNewFiles();
 
         return ExitCode::OK;
     }
