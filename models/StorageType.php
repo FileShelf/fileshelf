@@ -46,6 +46,7 @@ class StorageType extends FileShelfModel
         return ArrayHelper::merge(parent::rules(), [
             [['name'], 'required'],
             [['name', 'icon', 'formats'], 'string', 'max' => 255],
+            [['formats'], 'match', 'pattern' => '(\*\.[a-z0-9]+)(\;\*\.[a-z0-9]+)*'],
         ]);
     }
 
@@ -69,6 +70,12 @@ class StorageType extends FileShelfModel
     public function getStorages()
     {
         return $this->hasMany(Storage::class, ['storage_type_id' => 'id']);
+    }
+
+
+    public function getFormatList()
+    {
+        return explode(';', $this->formats);
     }
 
 }
