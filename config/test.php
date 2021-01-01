@@ -15,20 +15,20 @@ return [
     'language' => 'en-US',
     'components' => [
         'db' => $db,
-        'mailer' => [
+        'mailer'       => [
             'useFileTransport' => true,
         ],
         'assetManager' => [
             'basePath' => __DIR__ . '/../web/assets',
         ],
-        'urlManager' => [
+        'urlManager'   => [
             'showScriptName' => true,
         ],
-        'user' => [
+        'user'         => [
             'identityClass' => 'app\models\User',
         ],
-        'request' => [
-            'cookieValidationKey' => 'test',
+        'request'      => [
+            'cookieValidationKey'  => 'test',
             'enableCsrfValidation' => false,
             // but if you absolutely need it set cookie domain to localhost
             /*
@@ -36,6 +36,13 @@ return [
                 'domain' => 'localhost',
             ],
             */
+        ],
+
+        'fileAnalyzer' => [
+            'class' => 'app\components\fileAnalyzer\BaseFileAnalyzer',
+        ],
+        'fileScanner'  => [
+            'class' => 'app\components\FileScanner',
         ],
     ],
     'params' => $params,
