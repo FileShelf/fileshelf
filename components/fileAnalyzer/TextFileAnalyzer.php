@@ -5,7 +5,7 @@ namespace app\components\fileAnalyzer;
 /**
  * Analyzer for Plain Text Documents
  */
-class TextFileAnalyzer extends AbstractFileAnalyzer
+class TextFileAnalyzer extends BaseFileAnalyzer
 {
 
 

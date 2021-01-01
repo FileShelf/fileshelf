@@ -9,7 +9,7 @@ use Smalot\PdfParser\Parser;
  *
  * @property Parser $parser Parser
  */
-class PDFFileAnalyzer extends AbstractFileAnalyzer
+class PDFFileAnalyzer extends BaseFileAnalyzer
 {
 
 
