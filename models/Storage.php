@@ -75,4 +75,13 @@ class Storage extends FileShelfModel
     {
         return $this->hasOne(StorageType::class, ['id' => 'storage_type_id']);
     }
+
+
+    /**
+     * @return ActiveQuery|\app\models\query\FileQuery
+     */
+    public function getFiles()
+    {
+        return $this->hasMany(File::class, ['storage_id' => 'id']);
+    }
 }

@@ -2,12 +2,14 @@
 
 namespace app\models;
 
-use app\components\fileAnalyzer\AbstractFileAnalyzer;
-use app\components\fileAnalyzer\IFileAnalyzer;
+use app\components\fileAnalyzer\BaseFileAnalyzer;
 use app\components\FileShelfModel;
 use app\models\query\FileQuery;
 use app\models\query\StorageQuery;
+use DateTime;
 use Yii;
+use yii\base\ErrorException;
+use yii\base\InvalidValueException;
 use yii\db\ActiveQuery;
 use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
@@ -15,22 +17,25 @@ use yii\helpers\FileHelper;
 /**
  * This is the model class for table "file".
  *
- * @property string  $name              Name
- * @property string  $ext               Extension
- * @property string  $sub_directory     Sub-directory
- * @property string  $mimetype          Mime Type
- * @property string  $sha1_checksum     SHA1 checksum
- * @property string  $raw_content       Raw content
- * @property string  $content           Content
- * @property boolean $is_content_locked Is content locked
- * @property int     $byte_size         Byte size
- * @property int     $image_width       Image width
- * @property int     $image_height      Image height
- * @property int     $last_analyzed_at  Last analyzed at
- * @property int     $storage_id        Storage ID
+ * @property string        $name              Name
+ * @property string        $ext               Extension
+ * @property string        $sub_directory     Sub-directory
+ * @property string        $mimetype          Mime Type
+ * @property string        $sha1_checksum     SHA1 checksum
+ * @property string        $raw_content       Raw content
+ * @property string        $content           Content
+ * @property string        $title             Title
+ * @property string        $author            Author
+ * @property int|\DateTime $date              Date
+ * @property boolean       $is_content_locked Is content locked
+ * @property int           $byte_size         Byte size
+ * @property int           $image_width       Image width
+ * @property int           $image_height      Image height
+ * @property int           $last_analyzed_at  Last analyzed at
+ * @property int           $storage_id        Storage ID
  *
- * @property string  $absolutePath
- * @property Storage $storage
+ * @property string        $absolutePath
+ * @property Storage       $storage
  */
 class File extends FileShelfModel
 {
@@ -74,8 +79,8 @@ class File extends FileShelfModel
     {
         return ArrayHelper::merge(parent::rules(), [
             [['name', 'ext', 'sha1_checksum', 'storage_id'], 'required'],
-            [['byte_size', 'image_width', 'image_height', 'last_analyzed_at', 'storage_id'], 'integer'],
-            [['name', 'ext', 'mimetype', 'sub_directory'], 'string', 'max' => 255],
+            [['byte_size', 'image_width', 'image_height', 'date', 'last_analyzed_at', 'storage_id'], 'integer'],
+            [['name', 'ext', 'mimetype', 'author', 'title', 'sub_directory'], 'string', 'max' => 255],
             [['sha1_checksum'], 'string', 'length' => 40],
             [['raw_content', 'content'], 'string'],
             [['is_content_locked'], 'boolean'],
@@ -96,6 +101,9 @@ class File extends FileShelfModel
             'sha1_checksum'     => Yii::t('model_file', 'SHA1 checksum'),
             'raw_content'       => Yii::t('model_file', 'Raw content'),
             'content'           => Yii::t('model_file', 'Content'),
+            'author'            => Yii::t('model_file', 'Author'),
+            'title'             => Yii::t('model_file', 'Title'),
+            'date'              => Yii::t('model_file', 'Date'),
             'is_content_locked' => Yii::t('model_file', 'Is content locked'),
             'byte_size'         => Yii::t('model_file', 'Byte size'),
             'image_width'       => Yii::t('model_file', 'Image width'),
@@ -108,24 +116,15 @@ class File extends FileShelfModel
 
     public function analyze()
     {
-        /** @var AbstractFileAnalyzer $analyzerComponent */
+        /** @var BaseFileAnalyzer $analyzerComponent */
         $analyzerComponent = Yii::$app->fileAnalyzer;
-
-        /** @var IFileAnalyzer $analyzer */
         $analyzer = $analyzerComponent->getAnalyzer($this);
 
-        $this->raw_content = $analyzer->getText();
+        $analyzer->run($this);
 
-        if (!$this->is_content_locked) {
-            $this->content = $this->raw_content;
+        if (!$this->save()) {
+            throw new ErrorException("File #" . $this->id . ": \n" . implode("\n", $this->getErrors()));
         }
-
-        $this->mimetype = FileHelper::getMimeType($this->absolutePath);
-        $this->byte_size = filesize($this->absolutePath);
-        $this->sha1_checksum = sha1_file($this->absolutePath);
-
-        $this->last_analyzed_at = time();
-        $this->save();
     }
 
 
@@ -141,10 +140,24 @@ class File extends FileShelfModel
     public function getAbsolutePath() : string
     {
         if ($this->absolutePath === null) {
-            $this->absolutePath = FileHelper::normalizePath($this->storage->path . $this->sub_directory . $this->name . '.' . $this->ext);
+            $this->absolutePath = FileHelper::normalizePath($this->storage->path . $this->sub_directory . DIRECTORY_SEPARATOR . $this->name . '.' . $this->ext);
         }
 
         return $this->absolutePath;
+    }
+
+
+    public function getFileName() : string
+    {
+        return $this->name . '.' . $this->ext;
+    }
+
+
+    public function setContent(string $content)
+    {
+        if (!$this->is_content_locked) {
+            $this->content = $content;
+        }
     }
 
 
@@ -156,5 +169,30 @@ class File extends FileShelfModel
         $this->ext = pathinfo($filePath, PATHINFO_EXTENSION);
         $this->name = pathinfo($filePath, PATHINFO_FILENAME);
         $this->sub_directory = $directory;
+    }
+
+
+    public function getDate() : DateTime
+    {
+        return DateTime::createFromFormat('U', $this->date);
+    }
+
+
+    /**
+     *
+     *
+     * @param int|\DateTime $date
+     */
+    public function setDate($date)
+    {
+        if (!is_int($date) && !($date instanceof DateTime)) {
+            throw new InvalidValueException("");
+        }
+
+        if ($date instanceof DateTime) {
+            $this->date = intval($date->format('U'));
+        } else {
+            $this->date = $date;
+        }
     }
 }

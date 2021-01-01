@@ -7,13 +7,14 @@ use yii\db\Migration;
  */
 class m190724_151405_create_model_user extends Migration
 {
+    private $userTable = '{{%user}}';
 
     /**
      * {@inheritdoc}
      */
     public function up() : bool
     {
-        $this->createTable('{{%user}}', [
+        $this->createTable($this->userTable, [
             'id'            => $this->primaryKey()->comment('ID'),
             'name'          => $this->string(24)->comment('Name'),
             'email'         => $this->string()->comment('E-Mail'),
@@ -40,9 +41,9 @@ class m190724_151405_create_model_user extends Migration
             'created_at' => 0,
         ]);
 
-        $this->addForeignKey('fk_user_user_created', '{{%user}}', 'created_by', '{{%user}}', 'id', 'SET NULL', 'CASCADE');
-        $this->addForeignKey('fk_user_user_updated', '{{%user}}', 'updated_by', '{{%user}}', 'id', 'SET NULL', 'CASCADE');
-        $this->addForeignKey('fk_user_user_deleted', '{{%user}}', 'deleted_by', '{{%user}}', 'id', 'SET NULL', 'CASCADE');
+        $this->addForeignKey('fk_user_user_created', $this->userTable, 'created_by', $this->userTable, 'id', 'SET NULL', 'CASCADE');
+        $this->addForeignKey('fk_user_user_updated', $this->userTable, 'updated_by', $this->userTable, 'id', 'SET NULL', 'CASCADE');
+        $this->addForeignKey('fk_user_user_deleted', $this->userTable, 'deleted_by', $this->userTable, 'id', 'SET NULL', 'CASCADE');
 
         return true;
     }
@@ -53,10 +54,10 @@ class m190724_151405_create_model_user extends Migration
      */
     public function down() : bool
     {
-        $this->dropForeignKey('fk_user_user_deleted', '{{%user}}');
-        $this->dropForeignKey('fk_user_user_updated', '{{%user}}');
-        $this->dropForeignKey('fk_user_user_created', '{{%user}}');
-        $this->dropTable('{{%user}}');
+        $this->dropForeignKey('fk_user_user_deleted', $this->userTable);
+        $this->dropForeignKey('fk_user_user_updated', $this->userTable);
+        $this->dropForeignKey('fk_user_user_created', $this->userTable);
+        $this->dropTable($this->userTable);
 
         return true;
     }

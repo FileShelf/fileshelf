@@ -12,18 +12,30 @@ class FileScanner extends Component
 
     public function saveNewFiles(Storage $inStorage = null)
     {
+        $newFileCount = 0;
         $storageFiles = $this->findAllPhysicalFiles($inStorage);
 
         foreach ($storageFiles as $storageId => $files) {
             foreach ($files as $file) {
-                if (File::findByChecksum(sha1_file($file)) === null) {
+
+                $checksum = sha1_file($file);
+
+                if (File::findByChecksum($checksum) === null) {
                     $newFile = new File();
                     $newFile->storage_id = $storageId;
                     $newFile->setFile($file);
-                    $newFile->save();
+                    $newFile->sha1_checksum = $checksum;
+
+                    if (!$newFile->save()) {
+                        echo implode("\n", $newFile->getErrorSummary(true)) . "\n";
+                    }
+
+                    $newFileCount++;
                 }
             }
         }
+
+        return $newFileCount;
     }
 
 

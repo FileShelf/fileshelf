@@ -8,6 +8,8 @@
 namespace app\commands;
 
 use app\components\FileScanner;
+use app\models\Storage;
+use Exception;
 use Yii;
 use yii\console\Controller;
 use yii\console\ExitCode;
@@ -33,10 +35,29 @@ class FileController extends Controller
         /** @var FileScanner $scannerComponent */
         $scannerComponent = Yii::$app->fileScanner;
 
-        $scannerComponent->saveNewFiles();
+        $count = $scannerComponent->saveNewFiles();
 
+        echo "FileScanner: Found " . $count . " new files." . PHP_EOL;
         return ExitCode::OK;
     }
 
+
+    public function actionAnalyze()
+    {
+        foreach (Storage::find()->all() as $storage) {
+            foreach ($storage->getFiles()->all() as $file) {
+                try {
+                    $file->analyze();
+                    echo "FileAnalyzer: Analyzed `" . $file->getFileName() . "`" . PHP_EOL;
+                } catch (Exception $e) {
+                    echo PHP_EOL . "FileAnalyzer: Error while analyzing `" . $file->absolutePath . "`" . PHP_EOL;
+                    echo $e->getMessage() . PHP_EOL;
+                    echo $e->getTraceAsString() . PHP_EOL . PHP_EOL;
+                }
+            }
+        }
+
+        return ExitCode::OK;
+    }
 
 }

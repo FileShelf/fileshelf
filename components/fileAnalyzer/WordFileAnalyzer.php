@@ -9,7 +9,7 @@ use PhpOffice\PhpWord\PhpWord;
  *
  * @property PhpWord $parser Parser
  */
-class WordFileAnalyzer extends AbstractFileAnalyzer
+class WordFileAnalyzer extends BaseFileAnalyzer
 {
 
 

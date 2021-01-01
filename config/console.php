@@ -31,9 +31,17 @@ $config = [
             // 'cache' => 'cache',
         ],
         'db'          => $db,
+        'i18n'        => [
+            'translations' => [
+                '*' => [
+                    'class'         => 'yii\i18n\DbMessageSource',
+                    'enableCaching' => !YII_ENV_DEV,
+                ],
+            ],
+        ],
 
         'fileAnalyzer' => [
-            'class' => 'app\components\fileAnalyzer\AbstractFileAnalyzer',
+            'class' => 'app\components\fileAnalyzer\BaseFileAnalyzer',
         ],
         'fileScanner'  => [
             'class' => 'app\components\FileScanner',

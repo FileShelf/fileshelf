@@ -126,7 +126,7 @@ $config = [
         ],
 
         'fileAnalyzer' => [
-            'class' => 'app\components\fileAnalyzer\AbstractFileAnalyzer',
+            'class' => 'app\components\fileAnalyzer\BaseFileAnalyzer',
         ],
         'fileScanner'  => [
             'class' => 'app\components\FileScanner',
