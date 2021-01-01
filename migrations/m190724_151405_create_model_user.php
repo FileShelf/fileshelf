@@ -27,6 +27,7 @@ class m190724_151405_create_model_user extends Migration
             'access_token'  => $this->string()->comment('Access Token'),
             'refresh_token' => $this->string()->comment('Refresh Token'),
             'is_deleted'    => $this->boolean()->comment('Is deleted')->defaultValue(false),
+            'is_deletable'  => $this->boolean()->comment('Is deletable')->defaultValue(true),
             'created_by'    => $this->integer()->comment('Created by')->defaultValue(1),
             'created_at'    => $this->integer()->comment('Created at')->defaultValue(null),
             'updated_by'    => $this->integer()->comment('Updated by'),
@@ -35,10 +36,12 @@ class m190724_151405_create_model_user extends Migration
             'deleted_at'    => $this->integer()->comment('Deleted at')->defaultValue(null),
         ]);
 
-        $this->insert('{{%user}}', [
-            'id'         => 1,
-            'name'       => 'system',
-            'created_at' => 0,
+        $this->insert($this->userTable, [
+            'id'           => 1,
+            'name'         => 'system',
+            'is_deletable' => false,
+            'created_at'   => 0,
+            'created_by'   => 1,
         ]);
 
         $this->addForeignKey('fk_user_user_created', $this->userTable, 'created_by', $this->userTable, 'id', 'SET NULL', 'CASCADE');
