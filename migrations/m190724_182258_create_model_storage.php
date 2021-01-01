@@ -23,26 +23,29 @@ class m190724_182258_create_model_storage extends Migration
         $storageDefaultId = 1;
         $userDefaultId = 1;
 
-        $this->createTable('{{%storage_type}}', [
-            'id'         => $this->primaryKey()->comment('ID'),
-            'name'       => $this->string()->comment('Name')->notNull(),
-            'icon'       => $this->string()->comment('Icon'),
-            'formats'    => $this->string()->comment('Formats'),
-            'is_deleted' => $this->boolean()->comment('Is deleted')->defaultValue(false),
-            'created_by' => $this->integer()->comment('Created by'),
-            'created_at' => $this->integer()->comment('Created at')->defaultValue(null),
-            'updated_by' => $this->integer()->comment('Updated by'),
-            'updated_at' => $this->integer()->comment('Updated at')->defaultValue(null),
-            'deleted_by' => $this->integer()->comment('Deleted by'),
-            'deleted_at' => $this->integer()->comment('Deleted at')->defaultValue(null),
+        $this->createTable($this->storageTypeTable, [
+            'id'           => $this->primaryKey()->comment('ID'),
+            'name'         => $this->string()->comment('Name')->notNull(),
+            'icon'         => $this->string()->comment('Icon'),
+            'formats'      => $this->string()->comment('Formats'),
+            'is_deleted'   => $this->boolean()->comment('Is deleted')->defaultValue(false),
+            'is_deletable' => $this->boolean()->comment('Is deletable')->defaultValue(true),
+            'created_by'   => $this->integer()->comment('Created by'),
+            'created_at'   => $this->integer()->comment('Created at')->defaultValue(null),
+            'updated_by'   => $this->integer()->comment('Updated by'),
+            'updated_at'   => $this->integer()->comment('Updated at')->defaultValue(null),
+            'deleted_by'   => $this->integer()->comment('Deleted by'),
+            'deleted_at'   => $this->integer()->comment('Deleted at')->defaultValue(null),
             'deleted_by'  => $this->integer()->comment('Deleted by'),
             'deleted_at'  => $this->integer()->comment('Deleted at')->defaultValue(null),
         ]);
-        $this->insert('{{%storage_type}}', [
-            'id'         => $storageTypeDefaultId,
-            'name'       => 'Documents',
-            'created_by' => $userDefaultId,
-            'created_at' => 0,
+        $this->insert($this->storageTypeTable, [
+            'id'           => $storageTypeDefaultId,
+            'name'         => 'Documents',
+            'formats'      => '*.pdf;*.doc;*.docx;*.txt;*.rtf',
+            'created_by'   => $userDefaultId,
+            'created_at'   => 0,
+            'is_deletable' => false,
         ]);
         $this->addForeignKey('fk_user_storage_type_created', $this->storageTypeTable, 'created_by', $this->userTable, 'id', 'CASCADE', 'CASCADE');
         $this->addForeignKey('fk_user_storage_type_updated', $this->storageTypeTable, 'updated_by', $this->userTable, 'id', 'CASCADE', 'CASCADE');
@@ -55,6 +58,7 @@ class m190724_182258_create_model_storage extends Migration
             'path'            => $this->string()->comment('Path')->notNull(),
             'storage_type_id' => $this->integer()->comment('StorageType ID')->notNull(),
             'is_deleted'      => $this->boolean()->comment('Is deleted')->defaultValue(false),
+            'is_deletable'    => $this->boolean()->comment('Is deletable')->defaultValue(true),
             'created_by'      => $this->integer()->comment('Created by'),
             'created_at'      => $this->integer()->comment('Created at')->defaultValue(null),
             'updated_by'      => $this->integer()->comment('Updated by'),
@@ -69,6 +73,7 @@ class m190724_182258_create_model_storage extends Migration
             'name'            => 'Default',
             'path'            => FileHelper::normalizePath(Yii::getAlias('@runtime/data/defaultStorage')),
             'storage_type_id' => $storageTypeDefaultId,
+            'is_deletable'    => false,
             'created_by'      => $userDefaultId,
             'created_at'      => 0,
         ]);

@@ -39,6 +39,7 @@ class m191228_141507_create_model_file extends Migration
             'storage_id'        => $this->integer()->comment('Storage ID')->notNull(),
             'last_analyzed_at'  => $this->integer()->comment('Last analyzed at')->defaultValue(null),
             'is_deleted'        => $this->boolean()->comment('Is deleted')->defaultValue(false),
+            'is_deletable'      => $this->boolean()->comment('Is deletable')->defaultValue(true),
             'created_by'        => $this->integer()->comment('Created by'),
             'created_at'        => $this->integer()->comment('Created at')->defaultValue(null),
             'updated_by'        => $this->integer()->comment('Updated by'),

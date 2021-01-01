@@ -23,6 +23,7 @@ use yii2tech\ar\softdelete\SoftDeleteBehavior;
  * @property int|null $deleted_by    Deleted by
  * @property int|null $deleted_at    Deleted at
  * @property boolean  $is_deleted    Is deleted
+ * @property boolean  $is_deletable  Is deletable
  *
  * @property User     $createdBy
  * @property User     $deletedBy
@@ -53,6 +54,16 @@ class FileShelfModel extends ActiveRecord
     }
 
 
+    public function beforeDelete()
+    {
+        if (!$this->is_deletable) {
+            return false;
+        }
+
+        return parent::beforeDelete();
+    }
+
+
     public function afterSoftDelete()
     {
         /** @var User $user */
@@ -70,7 +81,7 @@ class FileShelfModel extends ActiveRecord
     public function rules()
     {
         return [
-            [['is_deleted', 'created_by', 'created_at', 'updated_by', 'updated_at', 'deleted_by', 'deleted_at'], 'integer'],
+            [['is_deleted', 'is_deletable', 'created_by', 'created_at', 'updated_by', 'updated_at', 'deleted_by', 'deleted_at'], 'integer'],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['created_by' => 'id']],
             [['deleted_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['deleted_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['updated_by' => 'id']],
@@ -84,14 +95,15 @@ class FileShelfModel extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id'         => Yii::t('model', 'ID'),
-            'is_deleted' => Yii::t('model', 'Is deleted'),
-            'created_by' => Yii::t('model', 'Created by'),
-            'created_at' => Yii::t('model', 'Created at'),
-            'updated_by' => Yii::t('model', 'Updated by'),
-            'updated_at' => Yii::t('model', 'Updated at'),
-            'deleted_by' => Yii::t('model', 'Deleted by'),
-            'deleted_at' => Yii::t('model', 'Deleted at'),
+            'id'           => Yii::t('model', 'ID'),
+            'is_deleted'   => Yii::t('model', 'Is deleted'),
+            'is_deletable' => Yii::t('model', 'Is deletable'),
+            'created_by'   => Yii::t('model', 'Created by'),
+            'created_at'   => Yii::t('model', 'Created at'),
+            'updated_by'   => Yii::t('model', 'Updated by'),
+            'updated_at'   => Yii::t('model', 'Updated at'),
+            'deleted_by'   => Yii::t('model', 'Deleted by'),
+            'deleted_at'   => Yii::t('model', 'Deleted at'),
         ];
     }
 
