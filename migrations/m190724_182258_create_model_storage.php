@@ -36,8 +36,6 @@ class m190724_182258_create_model_storage extends Migration
             'updated_at'   => $this->integer()->comment('Updated at')->defaultValue(null),
             'deleted_by'   => $this->integer()->comment('Deleted by'),
             'deleted_at'   => $this->integer()->comment('Deleted at')->defaultValue(null),
-            'deleted_by'  => $this->integer()->comment('Deleted by'),
-            'deleted_at'  => $this->integer()->comment('Deleted at')->defaultValue(null),
         ]);
         $this->insert($this->storageTypeTable, [
             'id'           => $storageTypeDefaultId,
@@ -65,8 +63,6 @@ class m190724_182258_create_model_storage extends Migration
             'updated_at'      => $this->integer()->comment('Updated at')->defaultValue(null),
             'deleted_by'      => $this->integer()->comment('Deleted by'),
             'deleted_at'      => $this->integer()->comment('Deleted at')->defaultValue(null),
-            'deleted_by'      => $this->integer()->comment('Deleted by'),
-            'deleted_at'      => $this->integer()->comment('Deleted at')->defaultValue(null),
         ]);
         $this->insert($this->storageTable, [
             'id'              => $storageDefaultId,
@@ -80,7 +76,6 @@ class m190724_182258_create_model_storage extends Migration
         $this->addForeignKey('fk_user_storage_created', $this->storageTable, 'created_by', $this->userTable, 'id', 'CASCADE', 'CASCADE');
         $this->addForeignKey('fk_user_storage_updated', $this->storageTable, 'updated_by', $this->userTable, 'id', 'CASCADE', 'CASCADE');
         $this->addForeignKey('fk_user_storage_deleted', $this->storageTable, 'deleted_by', $this->userTable, 'id', 'CASCADE', 'CASCADE');
-        $this->addForeignKey('fk_user_storage_deleted', '{{%storage}}', 'deleted_by', '{{%user}}', 'id', 'CASCADE', 'CASCADE');
         $this->addForeignKey('fk_storage_type_storage', $this->storageTable, 'storage_type_id', $this->storageTypeTable, 'id', 'RESTRICT', 'CASCADE');
 
         return true;

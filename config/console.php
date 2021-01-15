@@ -2,6 +2,7 @@
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
+$dbTest = require __DIR__ . '/test_db.php';
 
 $config = [
     'id'                  => 'basic-console',
@@ -31,6 +32,7 @@ $config = [
             // 'cache' => 'cache',
         ],
         'db'          => $db,
+        'dbTest'      => $dbTest,
         'i18n'        => [
             'translations' => [
                 '*' => [
@@ -48,13 +50,30 @@ $config = [
         ],
     ],
     'params'              => $params,
-    /*
-    'controllerMap' => [
-        'fixture' => [ // Fixture generation command line.
-            'class' => 'yii\faker\FixtureController',
+    'controllerMap'       => [
+        'fixture'        => [
+            // Fixture generation command line.
+            'class'     => 'yii\faker\FixtureController',
+            'namespace' => 'app\tests\unit\fixtures',
+        ],
+        'migrate'        => [
+            'class'         => 'app\components\console\controller\MigrateController',
+            'migrationPath' => [
+                '@app/migrations',
+            ],
+        ],
+        'migrate-system' => [
+            'class'               => 'app\components\console\controller\MigrateController',
+            'migrationPath'       => [
+                //'@yii/log/migrations',
+                '@yii/i18n/migrations',
+                //'@yii/caching/migrations',
+                '@yii/rbac/migrations',
+            ],
+            'migrationTable'      => '{{%migration_system}}',
+            'migrationNamespaces' => null,
         ],
     ],
-    */
 ];
 
 if (YII_ENV_DEV) {

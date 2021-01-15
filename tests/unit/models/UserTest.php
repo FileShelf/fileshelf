@@ -1,10 +1,10 @@
 <?php
 
-namespace tests\unit\models;
+namespace app\tests\unit\models;
 
 use app\models\User;
 
-class UserTest extends \Codeception\Test\Unit
+class UserTest extends Unit
 {
     public function testFindUserById()
     {

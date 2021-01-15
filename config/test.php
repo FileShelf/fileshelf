@@ -14,7 +14,7 @@ return [
     ],
     'language' => 'en-US',
     'components' => [
-        'db' => $db,
+        'db'           => $db,
         'mailer'       => [
             'useFileTransport' => true,
         ],
@@ -26,6 +26,9 @@ return [
         ],
         'user'         => [
             'identityClass' => 'app\models\User',
+        ],
+        'authManager'  => [
+            'class' => 'yii\rbac\DbManager',
         ],
         'request'      => [
             'cookieValidationKey'  => 'test',

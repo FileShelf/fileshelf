@@ -7,7 +7,9 @@ use yii\db\Migration;
  */
 class m190724_151405_create_model_user extends Migration
 {
+
     private $userTable = '{{%user}}';
+
 
     /**
      * {@inheritdoc}
@@ -22,10 +24,7 @@ class m190724_151405_create_model_user extends Migration
             'access_token'  => $this->string()->comment('Access Token'),
             'refresh_token' => $this->string()->comment('Refresh Token'),
             'avatar'        => $this->string()->comment('Avatar'),
-            'password'      => $this->string()->comment('Password'),
             'auth_key'      => $this->string()->comment('Auth Key'),
-            'access_token'  => $this->string()->comment('Access Token'),
-            'refresh_token' => $this->string()->comment('Refresh Token'),
             'is_deleted'    => $this->boolean()->comment('Is deleted')->defaultValue(false),
             'is_deletable'  => $this->boolean()->comment('Is deletable')->defaultValue(true),
             'created_by'    => $this->integer()->comment('Created by')->defaultValue(1),
@@ -42,6 +41,14 @@ class m190724_151405_create_model_user extends Migration
             'is_deletable' => false,
             'created_at'   => 0,
             'created_by'   => 1,
+        ]);
+        $this->insert($this->userTable, [
+            'id'            => 2,
+            'name'          => 'admin',
+            'password_hash' => Yii::$app->security->generatePasswordHash('admin', 4),
+            'is_deletable'  => false,
+            'created_at'    => 0,
+            'created_by'    => 1,
         ]);
 
         $this->addForeignKey('fk_user_user_created', $this->userTable, 'created_by', $this->userTable, 'id', 'SET NULL', 'CASCADE');
