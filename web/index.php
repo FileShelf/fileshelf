@@ -3,7 +3,7 @@
 defined('YII_DEBUG') or define('YII_DEBUG', true);
 defined('YII_ENV') or define('YII_ENV', 'dev');
 /**
- * Whether the the application is running in production environment.
+ * Whether the the application is running in staging environment.
  */
 defined('YII_ENV_STAGE') or define('YII_ENV_STAGE', YII_ENV === 'stage');
 

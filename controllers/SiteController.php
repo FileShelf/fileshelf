@@ -3,7 +3,7 @@
 namespace app\controllers;
 
 use app\components\FileShelfController;
-use app\models\ContactForm;
+use app\models\form\ContactForm;
 use app\models\form\LoginForm;
 use Yii;
 use yii\web\Response;

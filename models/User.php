@@ -5,7 +5,6 @@ namespace app\models;
 use app\components\FileShelfModel;
 use app\models\query\UserQuery;
 use Yii;
-use yii\base\NotSupportedException;
 use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 
@@ -61,14 +60,14 @@ class User extends FileShelfModel implements IdentityInterface
 
 
     /**
-     * Finds user by username
+     * Finds user by name
      *
-     * @param string $username
+     * @param string $name
      * @return \app\models\User|null
      */
-    public static function findByUsername($username)
+    public static function findByName($name)
     {
-        return static::find()->andWhere(['username' => $username])->one();
+        return static::find()->andWhere(['name' => $name])->one();
     }
 
 

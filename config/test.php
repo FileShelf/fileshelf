@@ -40,6 +40,11 @@ return [
             ],
             */
         ],
+        'view'         => [
+            'class'       => 'app\components\View',
+            'titlePrefix' => '',
+            'titleSuffix' => ' | FileShelf',
+        ],
 
         'fileAnalyzer' => [
             'class' => 'app\components\fileAnalyzer\BaseFileAnalyzer',

@@ -32,7 +32,7 @@ class LoginFormTest extends Unit
     public function testLoginWrongPassword()
     {
         $this->model = new LoginForm([
-            'username' => 'demo',
+            'username' => 'admin',
             'password' => 'wrong_password',
         ]);
 
@@ -44,11 +44,12 @@ class LoginFormTest extends Unit
     public function testLoginCorrect()
     {
         $this->model = new LoginForm([
-            'username' => 'demo',
-            'password' => 'demo',
+            'username' => 'admin',
+            'password' => 'admin',
         ]);
 
-        expect_that($this->model->login());
+        $success = $this->model->login();
+        expect_that($success);
         expect_not(Yii::$app->user->isGuest);
         expect($this->model->errors)->hasntKey('password');
     }
