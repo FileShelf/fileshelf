@@ -8,13 +8,19 @@ use app\models\form\LoginForm;
 use Yii;
 use yii\web\Response;
 
+/**
+ * Controller to handle all common actions related to the application frontend
+ *
+ * @package app\controllers
+ * @see     \app\components\View
+ */
 class SiteController extends FileShelfController
 {
 
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    public function behaviors() : array
     {
         $behaviors = parent::behaviors();
 
@@ -35,18 +41,18 @@ class SiteController extends FileShelfController
 
 
     /**
-     * Displays homepage.
+     * Renders the homepage
      *
      * @return string
      */
-    public function actionIndex()
+    public function actionIndex() : string
     {
         return $this->render('index');
     }
 
 
     /**
-     * Login action.
+     * Login action
      *
      * @return Response|string
      */
@@ -74,7 +80,7 @@ class SiteController extends FileShelfController
      *
      * @return Response
      */
-    public function actionLogout()
+    public function actionLogout() : Response
     {
         Yii::$app->user->logout();
 
@@ -106,7 +112,7 @@ class SiteController extends FileShelfController
      *
      * @return string
      */
-    public function actionAbout()
+    public function actionAbout() : string
     {
         return $this->render('about');
     }

@@ -9,8 +9,6 @@ use yii\web\AssetBundle;
  * Main App Asset Bundle
  *
  * @package   app\assets
- * @copyright 2015-2019 Ostendis AG
- * @author    Tom Lutzenberger <tom.lutzenberger@ostendis.com>
  */
 class AppAsset extends AssetBundle
 {

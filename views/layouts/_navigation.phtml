@@ -58,6 +58,14 @@ echo Nav::widget([
             'label' => FAS::i(FAS::_COGS)->fixedWidth()->size(FAS::SIZE_LG),
             'url'   => ['settings'],
         ],
+        '<li class="nav-item">'
+        . Html::beginForm(['/site/logout'])
+        . Html::submitButton(
+            FAS::i(FAS::_SIGN_OUT_ALT)->fixedWidth()->size(FAS::SIZE_LG),
+            ['class' => 'btn btn-link logout', 'title' => 'Logout']
+        )
+        . Html::endForm()
+        . '</li>',
     ],
 ]);
 NavBar::end();

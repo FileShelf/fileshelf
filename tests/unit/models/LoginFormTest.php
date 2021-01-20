@@ -12,16 +12,10 @@ class LoginFormTest extends Unit
     private $model;
 
 
-    protected function _after()
-    {
-        Yii::$app->user->logout();
-    }
-
-
-    public function testLoginNoUser()
+    public function testLoginNoUser() : void
     {
         $this->model = new LoginForm([
-            'username' => 'not_existing_username',
+            'userName' => 'not_existing_userName',
             'password' => 'not_existing_password',
         ]);
 
@@ -29,10 +23,11 @@ class LoginFormTest extends Unit
         expect_that(Yii::$app->user->isGuest);
     }
 
-    public function testLoginWrongPassword()
+
+    public function testLoginWrongPassword() : void
     {
         $this->model = new LoginForm([
-            'username' => 'admin',
+            'userName' => 'admin',
             'password' => 'wrong_password',
         ]);
 
@@ -41,10 +36,11 @@ class LoginFormTest extends Unit
         expect($this->model->errors)->hasKey('password');
     }
 
-    public function testLoginCorrect()
+
+    public function testLoginCorrect() : void
     {
         $this->model = new LoginForm([
-            'username' => 'admin',
+            'userName' => 'admin',
             'password' => 'admin',
         ]);
 
@@ -52,6 +48,12 @@ class LoginFormTest extends Unit
         expect_that($success);
         expect_not(Yii::$app->user->isGuest);
         expect($this->model->errors)->hasntKey('password');
+    }
+
+
+    protected function _after() : void
+    {
+        Yii::$app->user->logout();
     }
 
 }

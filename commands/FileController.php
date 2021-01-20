@@ -1,9 +1,4 @@
 <?php
-/**
- * @link      http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license   http://www.yiiframework.com/license/
- */
 
 namespace app\commands;
 
@@ -15,44 +10,46 @@ use yii\console\Controller;
 use yii\console\ExitCode;
 
 /**
- * This command echoes the first argument that you have entered.
+ * This command performs File-related actions
  *
- * This command is provided as an example for you to learn how to create console commands.
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since  2.0
+ * @package app\commands
  */
 class FileController extends Controller
 {
 
     /**
-     * This command echoes what you have entered as the message.
+     * This command runs the file scanner
+     * It scans all storages for new files and saves them to the DB
      *
      * @return int Exit code
      */
-    public function actionScan()
+    public function actionScan() : int
     {
         /** @var FileScanner $scannerComponent */
         $scannerComponent = Yii::$app->fileScanner;
 
         $count = $scannerComponent->saveNewFiles();
 
-        echo "FileScanner: Found " . $count . " new files." . PHP_EOL;
+        $this->stdout("FileScanner: Found " . $count . " new files.");
         return ExitCode::OK;
     }
 
 
-    public function actionAnalyze()
+    /**
+     * This command runs an Analysis over all files in the DB
+     *
+     * @return int Exit code
+     */
+    public function actionAnalyze() : int
     {
         foreach (Storage::find()->all() as $storage) {
             foreach ($storage->getFiles()->all() as $file) {
                 try {
                     $file->analyze();
-                    echo "FileAnalyzer: Analyzed `" . $file->getFileName() . "`" . PHP_EOL;
+                    $this->stdout("FileAnalyzer: Analyzed `" . $file->getFileName() . "`");
                 } catch (Exception $e) {
-                    echo PHP_EOL . "FileAnalyzer: Error while analyzing `" . $file->absolutePath . "`" . PHP_EOL;
-                    echo $e->getMessage() . PHP_EOL;
-                    echo $e->getTraceAsString() . PHP_EOL . PHP_EOL;
+                    $this->stderr("FileAnalyzer: Error while analyzing `" . $file->absolutePath . "`");
+                    $this->stderr($e);
                 }
             }
         }

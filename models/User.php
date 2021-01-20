@@ -11,13 +11,16 @@ use yii\web\IdentityInterface;
 /**
  * This is the model class for table "{{%user}}".
  *
- * @property string $name          Name
- * @property string $email         E-Mail
- * @property string $password_hash Password
- * @property string $access_token  Access Token
- * @property string $refresh_token Refresh Token
- * @property string $avatar        Avatar
- * @property string $formats       Formats
+ * @property string      $name          Name
+ * @property string      $email         E-Mail
+ * @property string      $password_hash Password
+ * @property string      $access_token  Access Token
+ * @property string      $refresh_token Refresh Token
+ * @property string      $auth_key      Authentication key
+ * @property string      $avatar        Avatar
+ * @property string      $formats       Formats
+ *
+ * @property-read string $authKey
  */
 class User extends FileShelfModel implements IdentityInterface
 {
@@ -25,7 +28,7 @@ class User extends FileShelfModel implements IdentityInterface
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName() : string
     {
         return '{{%user}}';
     }
@@ -42,11 +45,11 @@ class User extends FileShelfModel implements IdentityInterface
 
     /**
      * {@inheritdoc}
-     * @return \app\models\query\UserQuery the active query used by this AR class.
+     * @return UserQuery the active query used by this AR class.
      */
-    public static function find()
+    public static function find() : UserQuery
     {
-        return new UserQuery(get_called_class());
+        return new UserQuery(static::class);
     }
 
 
@@ -65,7 +68,7 @@ class User extends FileShelfModel implements IdentityInterface
      * @param string $name
      * @return \app\models\User|null
      */
-    public static function findByName($name)
+    public static function findByName(string $name) : ?User
     {
         return static::find()->andWhere(['name' => $name])->one();
     }
@@ -74,7 +77,7 @@ class User extends FileShelfModel implements IdentityInterface
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules() : array
     {
         return ArrayHelper::merge(parent::rules(), [
             [['name', 'email', 'password_hash', 'access_token', 'refresh_token', 'avatar', 'formats'], 'string', 'max' => 255],
@@ -85,7 +88,7 @@ class User extends FileShelfModel implements IdentityInterface
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels() : array
     {
         return ArrayHelper::merge(parent::attributeLabels(), [
             'name'          => Yii::t('model_user', 'Name'),
@@ -102,7 +105,7 @@ class User extends FileShelfModel implements IdentityInterface
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId() : int
     {
         return $this->getPrimaryKey();
     }
@@ -111,7 +114,7 @@ class User extends FileShelfModel implements IdentityInterface
     /**
      * {@inheritdoc}
      */
-    public function getAuthKey()
+    public function getAuthKey() : string
     {
         return $this->authKey;
     }
@@ -120,7 +123,7 @@ class User extends FileShelfModel implements IdentityInterface
     /**
      * {@inheritdoc}
      */
-    public function validateAuthKey($authKey)
+    public function validateAuthKey($authKey) : bool
     {
         return $this->authKey === $authKey;
     }
@@ -132,7 +135,7 @@ class User extends FileShelfModel implements IdentityInterface
      * @param string $password password to validate
      * @return bool if password provided is valid for current user
      */
-    public function validatePassword($password)
+    public function isPasswordValid(string $password) : bool
     {
         return Yii::$app->security->validatePassword($password, $this->password_hash);
     }

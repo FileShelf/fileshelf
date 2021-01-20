@@ -45,9 +45,9 @@ class m190724_182258_create_model_storage extends Migration
             'created_at'   => 0,
             'is_deletable' => false,
         ]);
-        $this->addForeignKey('fk_user_storage_type_created', $this->storageTypeTable, 'created_by', $this->userTable, 'id', 'CASCADE', 'CASCADE');
-        $this->addForeignKey('fk_user_storage_type_updated', $this->storageTypeTable, 'updated_by', $this->userTable, 'id', 'CASCADE', 'CASCADE');
-        $this->addForeignKey('fk_user_storage_type_deleted', $this->storageTypeTable, 'deleted_by', $this->userTable, 'id', 'CASCADE', 'CASCADE');
+        $this->addForeignKey('fk_user_storage_type_created', $this->storageTypeTable, 'created_by', $this->userTable, 'id', 'CASCADE', 'CASCADE'); // NOSONAR
+        $this->addForeignKey('fk_user_storage_type_updated', $this->storageTypeTable, 'updated_by', $this->userTable, 'id', 'CASCADE', 'CASCADE'); // NOSONAR
+        $this->addForeignKey('fk_user_storage_type_deleted', $this->storageTypeTable, 'deleted_by', $this->userTable, 'id', 'CASCADE', 'CASCADE'); // NOSONAR
 
         $this->createTable($this->storageTable, [
             'id'              => $this->primaryKey()->comment('ID'),
@@ -76,7 +76,7 @@ class m190724_182258_create_model_storage extends Migration
         $this->addForeignKey('fk_user_storage_created', $this->storageTable, 'created_by', $this->userTable, 'id', 'CASCADE', 'CASCADE');
         $this->addForeignKey('fk_user_storage_updated', $this->storageTable, 'updated_by', $this->userTable, 'id', 'CASCADE', 'CASCADE');
         $this->addForeignKey('fk_user_storage_deleted', $this->storageTable, 'deleted_by', $this->userTable, 'id', 'CASCADE', 'CASCADE');
-        $this->addForeignKey('fk_storage_type_storage', $this->storageTable, 'storage_type_id', $this->storageTypeTable, 'id', 'RESTRICT', 'CASCADE');
+        $this->addForeignKey('fk_storage_type_storage', $this->storageTable, 'storage_type_id', $this->storageTypeTable, 'id', 'RESTRICT', 'CASCADE'); // NOSONAR
 
         return true;
     }

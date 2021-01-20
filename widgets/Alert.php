@@ -1,7 +1,9 @@
 <?php
+
 namespace app\widgets;
 
 use Yii;
+use yii\bootstrap4\Widget;
 
 /**
  * Alert widget renders a message from session flash. All flash messages are displayed
@@ -22,8 +24,9 @@ use Yii;
  * @author Kartik Visweswaran <kartikv2@gmail.com>
  * @author Alexander Makarov <sam@rmcreative.ru>
  */
-class Alert extends \yii\bootstrap\Widget
+class Alert extends Widget
 {
+
     /**
      * @var array the alert types configuration for the flash messages.
      * This array is setup as $key => $value, where:
@@ -35,7 +38,7 @@ class Alert extends \yii\bootstrap\Widget
         'danger'  => 'alert-danger',
         'success' => 'alert-success',
         'info'    => 'alert-info',
-        'warning' => 'alert-warning'
+        'warning' => 'alert-warning',
     ];
     /**
      * @var array the options for rendering the close button tag.
@@ -46,8 +49,9 @@ class Alert extends \yii\bootstrap\Widget
 
     /**
      * {@inheritdoc}
+     * @throws \Exception
      */
-    public function run()
+    public function run() : string
     {
         $session = Yii::$app->session;
         $flashes = $session->getAllFlashes();
@@ -58,12 +62,12 @@ class Alert extends \yii\bootstrap\Widget
                 continue;
             }
 
-            foreach ((array) $flash as $i => $message) {
-                echo \yii\bootstrap\Alert::widget([
-                    'body' => $message,
+            foreach ((array)$flash as $i => $message) {
+                echo \yii\bootstrap4\Alert::widget([
+                    'body'        => $message,
                     'closeButton' => $this->closeButton,
-                    'options' => array_merge($this->options, [
-                        'id' => $this->getId() . '-' . $type . '-' . $i,
+                    'options'     => array_merge($this->options, [
+                        'id'    => $this->getId() . '-' . $type . '-' . $i,
                         'class' => $this->alertTypes[$type] . $appendClass,
                     ]),
                 ]);

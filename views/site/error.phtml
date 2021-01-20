@@ -1,13 +1,16 @@
 <?php
 
-/* @var $this app\components\View */
-/* @var $name string */
-/* @var $message string */
-/* @var $exception Exception */
+/**
+ * @var $this      app\components\View
+ * @var $name      string
+ * @var $message   string
+ * @var $exception Exception
+ */
 
 use yii\helpers\Html;
 
-$this->title = $name;
+$this->setTitle($name);
+
 ?>
 <div class="site-error">
 

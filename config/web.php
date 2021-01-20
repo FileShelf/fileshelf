@@ -70,9 +70,10 @@ $config = [
             'appendTimestamp' => true,
         ],
         'view'         => [
-            'class'       => 'app\components\View',
-            'titlePrefix' => '',
-            'titleSuffix' => ' | FileShelf',
+            'class'            => 'app\components\View',
+            'titlePrefix'      => '',
+            'titleSuffix'      => ' | FileShelf',
+            'defaultExtension' => 'phtml',
         ],
         'cache'        => [
             'class' => 'yii\caching\FileCache',

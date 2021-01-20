@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * @var $this app\components\View
+ */
+
+use app\models\File;
+use yii\bootstrap4\Html;
+
+$this->setTitle('Home');
+
+?>
+<div class="site-index">
+
+    <div class="row">
+        <?php foreach (File::find()->all() as $file) {
+            echo Html::beginTag('div', ['class' => 'col-lg-3']);
+            echo $this->render('_partials/file-card', ['file' => $file]);
+
+            echo Html::endTag('div');
+        }
+        ?>
+
+    </div>
+</div>

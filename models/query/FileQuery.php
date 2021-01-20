@@ -21,7 +21,7 @@ class FileQuery extends ActiveQuery
      * {@inheritdoc}
      * @return \app\models\File[]|array
      */
-    public function all($db = null)
+    public function all($db = null) : array
     {
         return parent::all($db);
     }

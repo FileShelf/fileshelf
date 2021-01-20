@@ -6,6 +6,11 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 
+/**
+ * The main controller for the FileShelf frontend of which all others should extend
+ *
+ * @package app\components
+ */
 class FileShelfController extends Controller
 {
 
@@ -16,7 +21,7 @@ class FileShelfController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    public function behaviors() : array
     {
         return [
             'accessControl' => [
@@ -37,7 +42,7 @@ class FileShelfController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function actions()
+    public function actions() : array
     {
         return [
             'error'   => [

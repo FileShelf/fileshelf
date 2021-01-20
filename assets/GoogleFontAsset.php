@@ -9,8 +9,6 @@ use yii\web\AssetBundle;
  * Google Font Asset Bundle
  *
  * @package   app\assets
- * @copyright 2015-2019 Ostendis AG
- * @author    Tom Lutzenberger <tom.lutzenberger@ostendis.com>
  */
 class GoogleFontAsset extends AssetBundle
 {
@@ -30,7 +28,7 @@ class GoogleFontAsset extends AssetBundle
     ];
 
 
-    public function init()
+    public function init() : void
     {
         parent::init();
         $this->css = [

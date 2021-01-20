@@ -11,19 +11,20 @@ use yii\db\ActiveRecord;
 use yii2tech\ar\softdelete\SoftDeleteBehavior;
 
 /**
- * Class FileShelfModel
+ * The main data model of which all others should extend
+ * Extended from the default Model ActiveRecord to implement own behaviour.
  *
  * @package   app\components
  *
- * @property int      $id            ID
- * @property int|null $created_by    Created by
- * @property int|null $created_at    Created at
- * @property int|null $updated_by    Updated by
- * @property int|null $updated_at    Updated at
- * @property int|null $deleted_by    Deleted by
- * @property int|null $deleted_at    Deleted at
- * @property boolean  $is_deleted    Is deleted
- * @property boolean  $is_deletable  Is deletable
+ * @property int      $id           ID
+ * @property int|null $created_by   Created by
+ * @property int|null $created_at   Created at
+ * @property int|null $updated_by   Updated by
+ * @property int|null $updated_at   Updated at
+ * @property int|null $deleted_by   Deleted by
+ * @property int|null $deleted_at   Deleted at
+ * @property boolean  $is_deleted   Is deleted
+ * @property boolean  $is_deletable Is deletable
  *
  * @property User     $createdBy
  * @property User     $deletedBy
@@ -32,14 +33,23 @@ use yii2tech\ar\softdelete\SoftDeleteBehavior;
 class FileShelfModel extends ActiveRecord
 {
 
+    /**
+     * @var string The name of the create scenario
+     * TODO: Implement this scenario
+     */
     public const SCENARIO_CREATE = 'create';
+
+    /**
+     * @var string The name of the update scenario
+     * TODO: Implement this scenario
+     */
     public const SCENARIO_UPDATE = 'update';
 
 
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    public function behaviors() : array
     {
         return [
             'timestamp'  => TimestampBehavior::class,
@@ -49,12 +59,19 @@ class FileShelfModel extends ActiveRecord
                 'softDeleteAttributeValues' => [
                     'is_deleted' => true,
                 ],
+                // TODO: Implement `allowDeleteCallback`
             ],
         ];
     }
 
 
-    public function beforeDelete()
+    /**
+     * {@inheritdoc}
+     * TODO: Have a closer look at SoftDeleteBehavior
+     *
+     * @see SoftDeleteBehavior::softDelete
+     */
+    public function beforeDelete() : bool
     {
         if (!$this->is_deletable) {
             return false;
@@ -64,7 +81,14 @@ class FileShelfModel extends ActiveRecord
     }
 
 
-    public function afterSoftDelete()
+    /**
+     * Action to perform after softDelete
+     *
+     * TODO: Is this right?
+     *
+     * @see SoftDeleteBehavior::afterSoftDelete
+     */
+    public function afterSoftDelete() : void
     {
         /** @var User $user */
         $user = Yii::$app->user->identity;
@@ -78,7 +102,7 @@ class FileShelfModel extends ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules() : array
     {
         return [
             [['is_deleted', 'is_deletable', 'created_by', 'created_at', 'updated_by', 'updated_at', 'deleted_by', 'deleted_at'], 'integer'],
@@ -92,7 +116,7 @@ class FileShelfModel extends ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels() : array
     {
         return [
             'id'           => Yii::t('model', 'ID'),
@@ -109,6 +133,10 @@ class FileShelfModel extends ActiveRecord
 
 
     /**
+     * Returns the related User, which created the current model
+     *
+     * Lazy loaded.
+     *
      * @return \yii\db\ActiveQuery
      */
     public function getCreatedBy() : ActiveQuery
@@ -118,6 +146,10 @@ class FileShelfModel extends ActiveRecord
 
 
     /**
+     * Returns the related User, which (soft-)deleted the current model
+     *
+     * Lazy loaded.
+     *
      * @return \yii\db\ActiveQuery
      */
     public function getDeletedBy() : ActiveQuery
@@ -127,6 +159,10 @@ class FileShelfModel extends ActiveRecord
 
 
     /**
+     * Returns the related User, which last updated the current model
+     *
+     * Lazy loaded.
+     *
      * @return \yii\db\ActiveQuery
      */
     public function getUpdatedBy() : ActiveQuery

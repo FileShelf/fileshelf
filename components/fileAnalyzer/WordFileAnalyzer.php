@@ -2,17 +2,20 @@
 
 namespace app\components\fileAnalyzer;
 
-use PhpOffice\PhpWord\PhpWord;
+use PhpOffice\PhpWord\IOFactory;
 
 /**
  * Analyzer for Word Documents
  *
- * @property PhpWord $parser Parser
+ * @package app\components\fileAnalyzer
  */
 class WordFileAnalyzer extends BaseFileAnalyzer
 {
 
 
+    /**
+     * {@inheritDoc}
+     */
     public function getText() : string
     {
         $sections = [];
@@ -26,8 +29,13 @@ class WordFileAnalyzer extends BaseFileAnalyzer
     }
 
 
+    /**
+     * {@inheritDoc}
+     * @throws \PhpOffice\PhpWord\Exception\Exception
+     */
     protected function initParser() : void
     {
-        $this->parser = new PhpWord();
+        $reader = IOFactory::createReader();
+        $this->parser = $reader->load($this->file->absolutePath);
     }
 }

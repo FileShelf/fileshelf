@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\components\FileShelfModel;
+use app\models\query\FileQuery;
 use app\models\query\StorageQuery;
 use Yii;
 use yii\db\ActiveQuery;
@@ -11,12 +12,14 @@ use yii\helpers\ArrayHelper;
 /**
  * This is the model class for table "storage".
  *
- * @property string      $name            Name
- * @property string      $icon            Icon
- * @property string      $path            Path
- * @property int         $storage_type_id StorageType ID
+ * @property string         $name            Name
+ * @property string         $icon            Icon
+ * @property string         $path            Path
+ * @property int            $storage_type_id StorageType ID
  *
- * @property StorageType $storageType
+ * @property StorageType    $storageType
+ *
+ * @property-read FileQuery $files
  */
 class Storage extends FileShelfModel
 {
@@ -24,7 +27,7 @@ class Storage extends FileShelfModel
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName() : string
     {
         return '{{%storage}}';
     }
@@ -34,22 +37,35 @@ class Storage extends FileShelfModel
      * {@inheritdoc}
      * @return StorageQuery the active query used by this AR class.
      */
-    public static function find()
+    public static function find() : StorageQuery
     {
-        return new StorageQuery(get_called_class());
+        return new StorageQuery(static::class);
     }
 
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules() : array
     {
         return ArrayHelper::merge(parent::rules(), [
-            [['name', 'path', 'storage_type_id'], 'required'],
-            [['storage_type_id'], 'integer'],
-            [['name', 'icon', 'path'], 'string', 'max' => 255],
-            [['storage_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => StorageType::class, 'targetAttribute' => ['storage_type_id' => 'id']],
+            [['name', 'path', 'storage_type_id'],
+             'required',
+            ],
+            [['storage_type_id'],
+             'integer',
+            ],
+            [['name', 'icon', 'path'],
+             'string',
+             'max' => 255,
+            ],
+
+            [['storage_type_id'],
+             'exist',
+             'skipOnError'     => true,
+             'targetClass'     => StorageType::class,
+             'targetAttribute' => ['storage_type_id' => 'id'],
+            ],
         ]);
     }
 
@@ -57,7 +73,7 @@ class Storage extends FileShelfModel
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels() : array
     {
         return ArrayHelper::merge(parent::attributeLabels(), [
             'name'            => Yii::t('model_storage', 'Name'),
@@ -78,7 +94,7 @@ class Storage extends FileShelfModel
 
 
     /**
-     * @return ActiveQuery|\app\models\query\FileQuery
+     * @return ActiveQuery|FileQuery
      */
     public function getFiles()
     {

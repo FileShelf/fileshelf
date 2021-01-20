@@ -17,6 +17,7 @@ class m191228_141507_create_model_file extends Migration
 
     /**
      * {@inheritdoc}
+     * @throws \yii\base\NotSupportedException
      */
     public function up() : bool
     {

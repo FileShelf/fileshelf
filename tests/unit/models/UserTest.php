@@ -107,8 +107,8 @@ class UserTest extends Unit
         expect_that($user->validateAuthKey($fixtureUser->auth_key));
         expect_not($user->validateAuthKey('test100key'));
 
-        expect_that($user->validatePassword('password_' . $userIndex));
-        expect_not($user->validatePassword('123456'));
+        expect_that($user->isPasswordValid('password_' . $userIndex));
+        expect_not($user->isPasswordValid('123456'));
     }
 
 }

@@ -22,7 +22,7 @@ class StorageQuery extends ActiveQuery
      * {@inheritdoc}
      * @return Storage[]|array
      */
-    public function all($db = null)
+    public function all($db = null) : array
     {
         return parent::all($db);
     }

@@ -1,25 +1,21 @@
 <?php
 
-
 namespace app\helpers;
-
 
 use Yii;
 
 /**
  * Class LayoutHelper
  *
- * @package   app\helpers
- * @copyright 2015-2019 Ostendis AG
- * @author    Tom Lutzenberger <tom.lutzenberger@ostendis.com>
+ * @package app\helpers
  */
 class LayoutHelper
 {
 
     /**
-     * Gets a pre-rendered string of css classes based on current controller and action
+     * Gets a pre-rendered string of CSS classes based on the current controller and action
      *
-     * @return string - String of css classes
+     * @return string String of CSS classes to use in HTML
      */
     public static function getLayoutCssClassString() : string
     {
@@ -30,7 +26,7 @@ class LayoutHelper
     /**
      * Get an array of css classes based on current controller and action
      *
-     * @return array - List of css classes
+     * @return array List of CSS classes
      */
     public static function getLayoutCssClasses() : array
     {

@@ -4,9 +4,16 @@
 namespace app\traits;
 
 use yii\db\ColumnSchemaBuilder;
+use yii\db\Connection;
 
+/**
+ * Trait to enable tinytext, mediumtext and longtext columns in certain DB drivers
+ *
+ * @package app\traits
+ */
 trait DbTextTypesTrait
 {
+
 
     /**
      * Creates a medium text column.
@@ -21,9 +28,9 @@ trait DbTextTypesTrait
 
 
     /**
-     * @return \yii\db\Connection the database connection to be used for schema building.
+     * @return Connection the database connection to be used for schema building.
      */
-    protected abstract function getDb();
+    abstract protected function getDb() : Connection;
 
 
     /**

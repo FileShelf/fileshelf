@@ -19,7 +19,7 @@ class ContactForm extends Model
 
 
     /**
-     * @return array the validation rules.
+     * {@inheritDoc}
      */
     public function rules() : array
     {
@@ -33,8 +33,9 @@ class ContactForm extends Model
         ];
     }
 
+
     /**
-     * @return array customized attribute labels
+     * {@inheritDoc}
      */
     public function attributeLabels() : array
     {

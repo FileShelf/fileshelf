@@ -7,6 +7,7 @@ use app\components\FileShelfModel;
 use app\models\query\FileQuery;
 use app\models\query\StorageQuery;
 use DateTime;
+use rmrevin\yii\fontawesome\FAS;
 use Yii;
 use yii\base\ErrorException;
 use yii\base\InvalidValueException;
@@ -36,17 +37,24 @@ use yii\helpers\FileHelper;
  *
  * @property string        $absolutePath
  * @property Storage       $storage
+ *
+ * @property-read mixed    $icon
+ * @property-read string   $fileName
+ * @property-write string  $file
  */
 class File extends FileShelfModel
 {
 
+    /**
+     * @var null|string The absolute path of the physical file
+     */
     private $absolutePath = null;
 
 
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName() : string
     {
         return '{{%file}}';
     }
@@ -64,26 +72,30 @@ class File extends FileShelfModel
 
     /**
      * {@inheritdoc}
-     * @return \app\models\query\FileQuery the active query used by this AR class.
      */
-    public static function find()
-    {
-        return new FileQuery(get_called_class());
-    }
-
-
-    /**
-     * {@inheritdoc}
-     */
-    public function rules()
+    public function rules() : array
     {
         return ArrayHelper::merge(parent::rules(), [
-            [['name', 'ext', 'sha1_checksum', 'storage_id'], 'required'],
-            [['byte_size', 'image_width', 'image_height', 'date', 'last_analyzed_at', 'storage_id'], 'integer'],
-            [['name', 'ext', 'mimetype', 'author', 'title', 'sub_directory'], 'string', 'max' => 255],
-            [['sha1_checksum'], 'string', 'length' => 40],
-            [['raw_content', 'content'], 'string'],
-            [['is_content_locked'], 'boolean'],
+            [['name', 'ext', 'sha1_checksum', 'storage_id'],
+             'required',
+            ],
+            [['byte_size', 'image_width', 'image_height', 'date', 'last_analyzed_at', 'storage_id'],
+             'integer',
+            ],
+            [['name', 'ext', 'mimetype', 'author', 'title', 'sub_directory'],
+             'string',
+             'max' => 255,
+            ],
+            [['sha1_checksum'],
+             'string',
+             'length' => 40,
+            ],
+            [['raw_content', 'content'],
+             'string',
+            ],
+            [['is_content_locked'],
+             'boolean',
+            ],
         ]);
     }
 
@@ -91,7 +103,7 @@ class File extends FileShelfModel
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels() : array
     {
         return ArrayHelper::merge(parent::attributeLabels(), [
             'name'              => Yii::t('model_file', 'Name'),
@@ -114,13 +126,19 @@ class File extends FileShelfModel
     }
 
 
-    public function analyze()
+    /**
+     * Runs an analysis against the current File model
+     *
+     * @throws \yii\base\ErrorException
+     */
+    public function analyze() : void
     {
         /** @var BaseFileAnalyzer $analyzerComponent */
         $analyzerComponent = Yii::$app->fileAnalyzer;
-        $analyzer = $analyzerComponent->getAnalyzer($this);
 
-        $analyzer->run($this);
+        // TODO: Handle exceptions
+        $analyzer = $analyzerComponent->getAnalyzer($this);
+        $analyzer->run();
 
         if (!$this->save()) {
             throw new ErrorException("File #" . $this->id . ": \n" . implode("\n", $this->getErrors()));
@@ -129,6 +147,8 @@ class File extends FileShelfModel
 
 
     /**
+     * Get the Storage the current File is in
+     *
      * @return ActiveQuery|StorageQuery
      */
     public function getStorage()
@@ -137,23 +157,38 @@ class File extends FileShelfModel
     }
 
 
+    /**
+     * Get the absolute path of the physical file
+     *
+     * @return string
+     */
     public function getAbsolutePath() : string
     {
         if ($this->absolutePath === null) {
-            $this->absolutePath = FileHelper::normalizePath($this->storage->path . $this->sub_directory . DIRECTORY_SEPARATOR . $this->name . '.' . $this->ext);
+            $this->absolutePath = FileHelper::normalizePath($this->storage->path . $this->sub_directory . '/' . $this->fileName);
         }
 
         return $this->absolutePath;
     }
 
 
+    /**
+     * Get the full file name including the extension
+     *
+     * @return string
+     */
     public function getFileName() : string
     {
         return $this->name . '.' . $this->ext;
     }
 
 
-    public function setContent(string $content)
+    /**
+     * Sets the text content of a file, if the content is not locked
+     *
+     * @param string $content
+     */
+    public function setContent(string $content) : void
     {
         if (!$this->is_content_locked) {
             $this->content = $content;
@@ -161,7 +196,12 @@ class File extends FileShelfModel
     }
 
 
-    public function setFile(string $absolutePath)
+    /**
+     * Sets the physical file of a model by absolute path
+     *
+     * @param string $absolutePath
+     */
+    public function setFile(string $absolutePath) : void
     {
         $filePath = FileHelper::normalizePath($absolutePath);
         $directory = str_replace($this->storage->path, '', pathinfo($filePath, PATHINFO_DIRNAME));
@@ -172,6 +212,11 @@ class File extends FileShelfModel
     }
 
 
+    /**
+     * Get the date of the file
+     *
+     * @return \DateTime
+     */
     public function getDate() : DateTime
     {
         return DateTime::createFromFormat('U', $this->date);
@@ -179,18 +224,18 @@ class File extends FileShelfModel
 
 
     /**
-     *
+     * Set the date of the file
      *
      * @param int|\DateTime $date
      */
-    public function setDate($date)
+    public function setDate($date) : void
     {
         if (!is_int($date) && !($date instanceof DateTime)) {
             throw new InvalidValueException("");
         }
 
         if ($date instanceof DateTime) {
-            $this->date = intval($date->format('U'));
+            $this->date = (int)$date->format('U');
         } else {
             $this->date = $date;
         }

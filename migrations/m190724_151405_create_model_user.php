@@ -13,6 +13,7 @@ class m190724_151405_create_model_user extends Migration
 
     /**
      * {@inheritdoc}
+     * @throws \yii\base\Exception
      */
     public function up() : bool
     {

@@ -1,0 +1,29 @@
+<?php
+
+use rmrevin\yii\fontawesome\FAS;
+use yii\helpers\Url;
+
+/**
+ * @var $file \app\models\File
+ */
+?>
+<div class="card mb-3">
+    <div class="card-head">
+        <img src="https://picsum.photos/200/300" class="card-img-top" alt="...">
+        <div class="card-edit-overlay">
+            <a href="<?= Url::to(['file/index', 'id' => $file->id]) ?>"><?= FAS::i(FAS::_EYE)->fixedWidth() ?></a>
+        </div>
+    </div>
+    <div class="card-body">
+        <h6 class="card-title">
+            <?= $file->title ?><br>
+            <small><?= FAS::i(FAS::_CALENDAR_ALT)->fixedWidth() ?>&nbsp;<?= Yii::$app->formatter->asDate($file->getDate()) ?></small><br>
+            <small class="text-muted"><?= FAS::i($file->getIcon())->fixedWidth() ?>&nbsp;<?= $file->getFileName() ?></small>
+        </h6>
+        <p class="card-text"><?= Yii::$app->formatter->asShortSize($file->byte_size, 0) ?></p>
+        <p class="card-text">
+            <small class="text-muted">Last updated: <?= Yii::$app->formatter->asRelativeTime($file->updated_at) ?> </small><br>
+            <small class="text-muted">Last analyzed: <?= Yii::$app->formatter->asRelativeTime($file->last_analyzed_at) ?> </small>
+        </p>
+    </div>
+</div>
